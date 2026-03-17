@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../services/api";
+import { authFetch } from "../services/authFetch";
 
 const AuthContext = createContext();
 
@@ -28,7 +29,12 @@ export const AuthProvider = ({ children }) => {
         if (res.data.token) {
             localStorage.setItem("token", res.data.token);
         }
-        const profileRes = await api.get("/auth/profile");
+
+        const profileRes = await authFetch({
+            url: "/auth/profile",
+            method: "GET",
+        });
+
         setUser(profileRes.data.data);
 
         return profileRes.data.data;
